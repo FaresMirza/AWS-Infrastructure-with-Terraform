@@ -1,34 +1,50 @@
 
 #Region Selection
-aws_region = "me-south-1"
+#Example
+# me-south-1
+aws_region = ""
 
 #Shared Creds
-aws_creds = "/Users/fares/.aws/credentials"
+#Example
+#/Users/fares/.aws/credentials
+aws_creds = ""
 
 #VPC CIDR
-vpc_cidr = "10.0.0.0/24"
+#Example
+#10.0.0.0/24
+vpc_cidr = ""
 
 #Subnets
+#Example
+# Subnet = {
+#"me-south-1a" = "10.0.10.0/24",
+# "me-south-1b" = "10.0.20.0/24",
+#"me-south-1c" = "10.0.30.0/24"
+# }
 subnets = {
-  "me-south-1a" = "10.0.10.0/24",
-  "me-south-1b" = "10.0.20.0/24",
-  "me-south-1c" = "10.0.30.0/24"
+  
 }
 
 #AMI ID
-ami_id = "ami-0f29bb40035eb2a58"
+#EXAMPLE
+#ami-0f29bb40035eb2a58
+ami_id = ""
 
 #Instance Type
-instance_type = "t3.micro"
+#EXAMPLE
+#t3.micro
+instance_type = ""
 
 #git repo
-git_repo = "https://github.com/FaresMirza/Express.git"
+#EXAMPLE
+#https://github.com/FaresMirza/Express.git
+git_repo = "https://github.com/<Put Your User Name>/<ProjectName>.git"
 
 #auto scaling group desired capacity
-asg_desired_capicty = 2
+asg_desired_capicty = 0
 
 #auto scaling group max capacity
-asg_max_size        = 4
+asg_max_size        = 0
 
 #auto scaling group min capacity
-asg_min_size        = 2
+asg_min_size        = 0

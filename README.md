@@ -1,8 +1,8 @@
-# AWS Auto-Scaling Web Infrastructure (ASWI)
+# AWS Auto-Scaling Web Infrastructure (ASWI) for Node.js
 
-> A Terraform project for deploying highly available and scalable web infrastructure on AWS
+> A Terraform project for deploying highly available and scalable Node.js applications on AWS
 
-This repository contains Terraform configurations to deploy a scalable AWS infrastructure with an Application Load Balancer (ALB) and Auto Scaling Group (ASG).
+This repository contains Terraform configurations to deploy a scalable AWS infrastructure with an Application Load Balancer (ALB) and Auto Scaling Group (ASG), specifically designed for Node.js web applications. The infrastructure automatically scales based on demand and provides high availability across multiple availability zones.
 
 ![Infrastructure Diagram](Infrastructure.png)
 
@@ -10,10 +10,10 @@ This repository contains Terraform configurations to deploy a scalable AWS infra
 
 This project sets up the following AWS resources:
 
-- VPC with public subnets
-- Internet Gateway and routing
-- Application Load Balancer (ALB)
-- Auto Scaling Group with Launch Template
+- VPC with public subnets across multiple availability zones
+- Internet Gateway and routing for public access
+- Application Load Balancer (ALB) for distributing traffic
+- Auto Scaling Group with Launch Template for Node.js instances
 - Security Groups for ALB and EC2 instances
 - Key Pair for EC2 instance access
 
@@ -22,6 +22,7 @@ This project sets up the following AWS resources:
 - [Terraform](https://www.terraform.io/downloads.html) (v0.12 or later)
 - AWS CLI configured with appropriate credentials
 - Git
+- Node.js application repository (the application should listen on port 3000 by default)
 
 ## Project Structure
 
@@ -69,10 +70,43 @@ subnets = {
 }
 instance_type = "t2.micro"
 ami_id = "ami-xxxxx"
-git_repo = "your-application-repo"
+git_repo = "your-nodejs-application-repo"  # Your Node.js application repository URL
 asg_desired_capicty = 2
 asg_max_size = 4
 asg_min_size = 1
+```
+
+## Node.js Application Requirements
+
+Your Node.js application should:
+
+1. Listen on port 3000 (configurable via environment variables)
+2. Include a proper health check endpoint at `/health`
+3. Handle graceful shutdowns for auto-scaling events
+4. Store session data externally (if needed) as instances can be terminated
+5. Use environment variables for configuration
+
+Example minimal Node.js app:
+
+```javascript
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
+// Handle graceful shutdown
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM. Performing graceful shutdown");
+  // Close database connections, etc.
+  process.exit(0);
+});
 ```
 
 ## Usage
