@@ -81,7 +81,7 @@ asg_min_size = 1
 Your Node.js application should:
 
 1. Listen on port 3000 (configurable via environment variables)
-2. Include a proper health check endpoint at `/health`
+2. Include a proper health check endpoint at `/`
 3. Handle graceful shutdowns for auto-scaling events
 4. Store session data externally (if needed) as instances can be terminated
 5. Use environment variables for configuration
@@ -93,19 +93,12 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get("/health", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-});
-
-// Handle graceful shutdown
-process.on("SIGTERM", () => {
-  console.log("Received SIGTERM. Performing graceful shutdown");
-  // Close database connections, etc.
-  process.exit(0);
 });
 ```
 
